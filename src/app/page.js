@@ -211,7 +211,7 @@ export default function Home() {
             <Image src={Flower} alt="flower" className="w-32 h-32"/>
         </div>
       </div>
-      {/* <Login /> */}
+      <Login />
     </>
   );
 }

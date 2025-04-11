@@ -153,11 +153,14 @@ export default function Home() {
     console.log("Questionnaire Data", transformedData); // log the mapped value here
     console.log("Selected Questionnaire:", title);
     console.log("Period:", period);
-
+    if (typeof window !== "undefined") {
+      
     localStorage.setItem("questionnaire_title", title);
     localStorage.setItem("questionnaire_period", period);
     localStorage.setItem("uhid",userData.user.uhid);
     localStorage.setItem("name",userData.user.first_name+" "+userData.user.last_name);
+    }
+
     router.push("/Questionnaire");
   };
 

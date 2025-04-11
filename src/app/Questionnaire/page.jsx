@@ -54,11 +54,13 @@ const page = () => {
   const [questionnairePeriod, setQuestionnairePeriod] = useState("");
 
   useEffect(() => {
-    const storedTitle = localStorage.getItem("questionnaire_title");
-    const storedPeriod = localStorage.getItem("questionnaire_period");
-    if (storedTitle && storedPeriod) {
-      setQuestionnaireTitle(storedTitle);
-      setQuestionnairePeriod(storedPeriod);
+    if (typeof window !== "undefined") {
+      const storedTitle = localStorage.getItem("questionnaire_title");
+      const storedPeriod = localStorage.getItem("questionnaire_period");
+      if (storedTitle && storedPeriod) {
+        setQuestionnaireTitle(storedTitle);
+        setQuestionnairePeriod(storedPeriod);
+      }
     }
   }, [router.isReady]);
 

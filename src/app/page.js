@@ -52,48 +52,48 @@ export default function Home() {
     year: "numeric", // "2025"
   });
 
-  const data = [
-    {
-      status: "Completed",
-      period: "Pre Operative",
-      title: "OXFORD KNEE SCORE (OKS)",
-      periodShort: "PRE OP",
-      questions: 14,
-      duration: "10 min",
-    },
-    {
-      status: "Pending",
-      period: "6 Weeks",
-      title: "KNEE SOCIETY SCORE (KSS)",
-      periodShort: "6 W",
-      questions: 18,
-      duration: "9 min",
-    },
-    {
-      status: "Completed",
-      period: "3 Months",
-      title: "KNEE INJURY AND OSTEOARTHRITIS OUTCOME SCORE (KOOS)",
-      periodShort: "3 M",
-      questions: 15,
-      duration: "12 min",
-    },
-    {
-      status: "Pending",
-      period: "6 Months",
-      title: "FORGOTTEN JOINT SCORE (FJS)",
-      periodShort: "6 M",
-      questions: 12,
-      duration: "8 min",
-    },
-    {
-      status: "Completed",
-      period: "1 Year",
-      title: "SHORT FORM 12 (SF-12)",
-      periodShort: "1 YR",
-      questions: 12,
-      duration: "10 min",
-    },
-  ];
+  // const data = [
+  //   {
+  //     status: "Completed",
+  //     period: "Pre Operative",
+  //     title: "OXFORD KNEE SCORE (OKS)",
+  //     periodShort: "PRE OP",
+  //     questions: 14,
+  //     duration: "10 min",
+  //   },
+  //   {
+  //     status: "Pending",
+  //     period: "6 Weeks",
+  //     title: "KNEE SOCIETY SCORE (KSS)",
+  //     periodShort: "6 W",
+  //     questions: 18,
+  //     duration: "9 min",
+  //   },
+  //   {
+  //     status: "Completed",
+  //     period: "3 Months",
+  //     title: "KNEE INJURY AND OSTEOARTHRITIS OUTCOME SCORE (KOOS)",
+  //     periodShort: "3 M",
+  //     questions: 15,
+  //     duration: "12 min",
+  //   },
+  //   {
+  //     status: "Pending",
+  //     period: "6 Months",
+  //     title: "FORGOTTEN JOINT SCORE (FJS)",
+  //     periodShort: "6 M",
+  //     questions: 12,
+  //     duration: "8 min",
+  //   },
+  //   {
+  //     status: "Completed",
+  //     period: "1 Year",
+  //     title: "SHORT FORM 12 (SF-12)",
+  //     periodShort: "1 YR",
+  //     questions: 12,
+  //     duration: "10 min",
+  //   },
+  // ];
 
   const router = useRouter();
 

@@ -924,6 +924,7 @@ const page = () => {
   };
 
   const sendQuestionnaireScores = async (score, timestamp) => {
+    if (typeof window !== "undefined") {
     try {
       const uhid = localStorage.getItem("uhid"); // Get user UHID
       const name = questionnaireTitle; // e.g. "Oxford Knee Score"
@@ -958,14 +959,16 @@ const page = () => {
       console.error("PUT Error:", error);
       // toast.error("Update failed!");
     }
+  }
   };
 
   const updateQuestionnaireStatus = async () => {
-
+    if (typeof window !== "undefined") {
+    const uhid = localStorage.getItem("uhid");
     const cmp =1;
     try {
       const payload = {
-        uhid: patid,
+        uhid: uhid,
         name: questionnaireTitle,       // same as HomeFragment.selectedquestionnaire
         period: questionnairePeriod,             // same as HomeFragment.quesperiod
         completed: cmp,
@@ -987,6 +990,7 @@ console.log("Payload:", payload);
       console.error("PUT Error (status):", error);
       alert("❌ Failed to update questionnaire status.");
     }
+  }
   };
 
   function calculateTotalScore(answers) {

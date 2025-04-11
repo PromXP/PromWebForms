@@ -137,6 +137,7 @@ export default function Home() {
 
   const handleUserData = (data) => {
     setUserData(data);
+    
   };
 
   useEffect(() => {
@@ -144,6 +145,7 @@ export default function Home() {
       const mapped = mapQuestionnaireData(userData.user.questionnaire_assigned);
       setTransformedData(mapped);
     }
+    console.log("Patient Data",userData);
   }, [userData]);
 
   const handlequestionnaireclick = (title, period) => {
@@ -154,6 +156,7 @@ export default function Home() {
     localStorage.setItem("questionnaire_title", title);
     localStorage.setItem("questionnaire_period", period);
     localStorage.setItem("uhid",userData.user.uhid);
+    localStorage.setItem("name",userData.user.first_name+" "+userData.user.last_name);
     router.push("/Questionnaire");
   };
 

@@ -1150,14 +1150,14 @@ console.log("Payload:", payload);
                 width < 850 ? "text-center h-fit" : "text-end h-1/2 "
               }`}
             >
-              PATIENT NAME: APM
+              PATIENT NAME: {localStorage.getItem("name")}
             </p>
             <p
               className={`w-full  ${
                 width < 850 ? "text-center  h-fit" : "text-end  h-1/2"
               }`}
             >
-              PATIENT ID: 12345678
+              PATIENT ID: {localStorage.getItem("uhid")}
             </p>
           </div>
         </div>

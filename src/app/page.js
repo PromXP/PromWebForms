@@ -44,6 +44,14 @@ export default function Home() {
 
   const { width, height } = useWindowSize();
 
+  const [userData, setUserData] = useState(null);
+
+  const today = new Date().toLocaleDateString("en-US", {
+    month: "long", // "April"
+    day: "2-digit", // "09"
+    year: "numeric", // "2025"
+  });
+
   const data = [
     {
       status: "Completed",
@@ -89,12 +97,74 @@ export default function Home() {
 
   const router = useRouter();
 
+  const [transformedData, setTransformedData] = useState([]);
+
+  const mapQuestionnaireData = (assignedList) => {
+    return assignedList.map((item) => {
+      const name = item.name.toLowerCase();
+      let questions = 0;
+      let duration = "";
+
+      if (name.includes("oxford knee score")) {
+        questions = 12;
+        duration = "15 min";
+      } else if (name.includes("short form - 12")) {
+        questions = 12;
+        duration = "15 min";
+      } else if (name.includes("koos")) {
+        questions = 7;
+        duration = "12 min";
+      } else if (name.includes("knee society score")) {
+        questions = 8;
+        duration = "12 min";
+      } else if (name.includes("forgotten joint score")) {
+        questions = 12;
+        duration = "15 min";
+      }
+
+      return {
+        status: item.completed === 1 ? "Completed" : "Pending",
+        period: item.period,
+        title: item.name.toUpperCase(),
+        periodShort: item.period,
+        questions: questions,
+        duration: duration,
+        assigned_date: item.assigned_date,
+        deadline: item.deadline,
+      };
+    });
+  };
+
+  const handleUserData = (data) => {
+    setUserData(data);
+  };
+
+  useEffect(() => {
+    if (userData?.user?.questionnaire_assigned) {
+      const mapped = mapQuestionnaireData(userData.user.questionnaire_assigned);
+      setTransformedData(mapped);
+    }
+  }, [userData]);
+
+  const handlequestionnaireclick = (title, period) => {
+    console.log("Questionnaire Data", transformedData); // log the mapped value here
+    console.log("Selected Questionnaire:", title);
+    console.log("Period:", period);
+
+    localStorage.setItem("questionnaire_title", title);
+    localStorage.setItem("questionnaire_period", period);
+    localStorage.setItem("uhid",userData.user.uhid);
+    router.push("/Questionnaire");
+  };
+
   const [isOpen, setIsOpen] = useState(true);
 
   return (
     <>
       <div
-        className={`${poppins.className} w-screen  bg-white flex flex-col  ${width<600?"h-full p-2":"h-screen p-4"} relative`}
+        className={`${poppins.className} w-screen  bg-white flex flex-col  ${
+          width < 600 ? "h-full p-2" : "h-screen p-4"
+        } relative`}
       >
         <div
           className={`w-full  rounded-2xl bg-[linear-gradient(to_bottom_right,_#7075DB_0%,_#7075DB_40%,_#DFCFF7_100%)] flex ${
@@ -108,7 +178,7 @@ export default function Home() {
               width < 750 ? "items-center" : ""
             }`}
           >
-            <p className="font-normal text-base text-white">April 09, 2025</p>
+            <p className="font-normal text-base text-white">{today}</p>
             <div
               className={`flex flex-col ${width < 750 ? "items-center" : ""}`}
             >
@@ -129,7 +199,7 @@ export default function Home() {
                     width < 750 ? "text-center" : ""
                   }`}
                 >
-                  APM
+                  {userData?.user?.first_name + " " + userData?.user?.last_name}
                 </p>
               </div>
               <p
@@ -161,12 +231,25 @@ export default function Home() {
               width < 600 ? "flex-col mx-auto" : "flex-row"
             } flex gap-4 w-max`}
           >
-            {data.map((item, index) => (
+            {transformedData.map((item, index) => (
               <div
                 key={index}
-                className={` h-[350px] bg-white rounded-2xl flex flex-col p-6 shadow-2xl gap-5 cursor-pointer ${width<350?"w-full":width<600?"w-[350px]":"w-[350px]"}`}
-                onClick={() => router.push("/Questionnaire")}
-                >
+                className={` h-[350px] bg-white rounded-2xl flex flex-col p-6 shadow-2xl gap-5 ${
+                  item.status === "Pending"
+                    ? "cursor-pointer"
+                    : "cursor-default"
+                } ${
+                  width < 350
+                    ? "w-full"
+                    : width < 600
+                    ? "w-[350px]"
+                    : "w-[350px]"
+                }`}
+                onClick={() =>
+                  item.status === "Pending" &&
+                  handlequestionnaireclick(item.title, item.period)
+                }
+              >
                 <div className="w-full h-[15%] flex justify-end items-center">
                   <p
                     className={`text-white font-normal text-base rounded-2xl px-3 py-1 ${
@@ -186,21 +269,34 @@ export default function Home() {
                     {item.title}
                   </p>
                 </div>
-                <div className="w-full h-[35%] flex items-center flex-row">
-                  <div className="w-[60%] flex flex-col items-center">
-                    <p className="font-normal text-[15px] text-[#3C3C3C]">
+                <div className="w-full h-[35%] flex items-center flex-row justify-start">
+                  <div className="w-1/3 h-full flex flex-col items-center justify-between">
+                    <p className="font-normal text-[15px] text-[#3C3C3C] text-center">
                       No. of Questions
                     </p>
-                    <p className="font-semibold text-[16px] text-black">
+                    <p className="font-semibold text-[16px] text-black text-center">
                       {item.questions}
                     </p>
                   </div>
-                  <div className="w-[20%] flex flex-col items-center">
-                    <p className="font-normal text-[15px] text-[#3C3C3C]">
+                  <div className="w-1/3 h-full flex flex-col items-center justify-between">
+                    <p className="font-normal text-[15px] text-[#3C3C3C] text-center">
                       Duration
                     </p>
-                    <p className="font-semibold text-[16px] text-black">
+                    <p className="font-semibold text-[16px] text-black text-center">
                       {item.duration}
+                    </p>
+                  </div>
+                  <div className="w-1/3 h-full flex flex-col items-center justify-between">
+                    <p className="font-normal text-[15px] text-[#3C3C3C] text-center">
+                      Deadline
+                    </p>
+                    <p className="font-semibold text-[16px] text-black text-center">
+                      {new Date(item.deadline).toLocaleString("en-IN", {
+                        timeZone: "Asia/Kolkata",
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
                     </p>
                   </div>
                 </div>
@@ -210,10 +306,14 @@ export default function Home() {
         </div>
 
         <div className="absolute bottom-0 left-4">
-            <Image src={Flower} alt="flower" className="w-32 h-32"/>
+          <Image src={Flower} alt="flower" className="w-32 h-32" />
         </div>
       </div>
-      <Login isOpen={isOpen} onClose={()=>setIsOpen(false)}/>
+      <Login
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        userDatasend={handleUserData}
+      />
     </>
   );
 }

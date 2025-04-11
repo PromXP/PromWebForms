@@ -125,7 +125,7 @@ export default function Home() {
       return {
         status: item.completed === 1 ? "Completed" : "Pending",
         period: item.period,
-        title: item.name.toUpperCase(),
+        title: item.name,
         periodShort: item.period,
         questions: questions,
         duration: duration,
@@ -139,6 +139,7 @@ export default function Home() {
     setUserData(data);
     
   };
+  
 
   useEffect(() => {
     if (userData?.user?.questionnaire_assigned) {
@@ -160,7 +161,9 @@ export default function Home() {
     router.push("/Questionnaire");
   };
 
-  const [isOpen, setIsOpen] = useState(true);
+
+
+
 
   return (
     <>

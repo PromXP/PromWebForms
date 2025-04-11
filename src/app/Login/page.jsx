@@ -18,7 +18,7 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
-const page = () => {
+const page = ({ isOpen, onClose, children }) => {
   const useWindowSize = () => {
     const [size, setSize] = useState({
       width: 0,
@@ -42,6 +42,8 @@ const page = () => {
   };
 
   const { width, height } = useWindowSize();
+
+  if (!isOpen) return null;
 
   return (
     <div
@@ -77,19 +79,45 @@ const page = () => {
                       : "flex-row"
                   }`}
                 >
-                  <p className="font-bold text-5 text-black">ENTER UHID / MOBILE NO</p>
+                  <p className="font-bold text-5 text-black">ENTER UHID / MOBILE NO / EMAIL</p>
                 </div>
+                
               
 
               <div className="w-full flex flex-col gap-2">
                 
                 <input
-                  placeholder="UHID / MOBILE"
+                  placeholder="UHID / MOBILE / EMAIL"
                   rows={3}
                   className="w-full text-black px-4 py-2  text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   style={{ backgroundColor: "rgba(71, 84, 103, 0.1)" }}
                   
                 />
+              
+              </div>
+
+              <div
+                  className={`w-full flex gap-4 justify-start items-center ${
+                    width < 530
+                      ? "flex-col justify-center items-center"
+                      : "flex-row"
+                  }`}
+                >
+                  <p className="font-bold text-5 text-black">PASSWORD</p>
+                </div>
+                
+              
+
+              <div className="w-full flex flex-col gap-2">
+                
+                <input
+                  placeholder="PASSWORD"
+                  rows={3}
+                  className="w-full text-black px-4 py-2  text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  style={{ backgroundColor: "rgba(71, 84, 103, 0.1)" }}
+                  
+                />
+              
               </div>
 
               <div className="w-full flex flex-row justify-center items-center">
@@ -98,9 +126,10 @@ const page = () => {
                   <p
                     className="font-semibold rounded-full px-3 py-[1px] cursor-pointer text-center text-white text-sm border-[#005585] border-2"
                     style={{ backgroundColor: "rgba(0, 85, 133, 0.9)" }}
+                    onClick={onClose}
                     
                   >
-                    SEND
+                    LOGIN
                   </p>
                 
               </div>

@@ -89,6 +89,8 @@ export default function Home() {
 
   const router = useRouter();
 
+  const [isOpen, setIsOpen] = useState(true);
+
   return (
     <>
       <div
@@ -211,7 +213,7 @@ export default function Home() {
             <Image src={Flower} alt="flower" className="w-32 h-32"/>
         </div>
       </div>
-      <Login />
+      <Login isOpen={isOpen} onClose={()=>setIsOpen(false)}/>
     </>
   );
 }

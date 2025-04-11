@@ -52,6 +52,8 @@ const page = () => {
   const router = useRouter();
   const [questionnaireTitle, setQuestionnaireTitle] = useState("");
   const [questionnairePeriod, setQuestionnairePeriod] = useState("");
+  const [patname,setpatname] = useState("");
+  const [patid,setpatid] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -61,6 +63,8 @@ const page = () => {
         setQuestionnaireTitle(storedTitle);
         setQuestionnairePeriod(storedPeriod);
       }
+      setpatname(localStorage.getItem("name"));
+      setpatid(localStorage.getItem("id"));
     }
   }, [router.isReady]);
 
@@ -850,7 +854,10 @@ const page = () => {
     }
 
     setAnswers(updatedAnswers);
+    
+    if (typeof window !== "undefined") {
     localStorage.setItem("oks_answers", JSON.stringify(updatedAnswers));
+    }
   };
 
   const isSelected = (option) => (answers[currentIndex] || []).includes(option);
@@ -908,7 +915,9 @@ const page = () => {
       await sendQuestionnaireScores(scores, Date.now());
       await updateQuestionnaireStatus();
 
+      if (typeof window !== "undefined") {
       localStorage.removeItem("oks_answers");
+      }
       router.push("/");
       console.log("Submitted answers:", answers);
     }
@@ -956,7 +965,7 @@ const page = () => {
     const cmp =1;
     try {
       const payload = {
-        uhid: localStorage.getItem("uhid"),
+        uhid: patid,
         name: questionnaireTitle,       // same as HomeFragment.selectedquestionnaire
         period: questionnairePeriod,             // same as HomeFragment.quesperiod
         completed: cmp,
@@ -1152,14 +1161,15 @@ console.log("Payload:", payload);
                 width < 850 ? "text-center h-fit" : "text-end h-1/2 "
               }`}
             >
-              PATIENT NAME: {localStorage.getItem("name")}
+              
+              PATIENT NAME: {patname}
             </p>
             <p
               className={`w-full  ${
                 width < 850 ? "text-center  h-fit" : "text-end  h-1/2"
               }`}
             >
-              PATIENT ID: {localStorage.getItem("uhid")}
+              PATIENT ID: {patid}
             </p>
           </div>
         </div>

@@ -57,14 +57,14 @@ const page = () => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const storedTitle = localStorage.getItem("questionnaire_title");
-      const storedPeriod = localStorage.getItem("questionnaire_period");
+      const storedTitle = sessionStorage.getItem("questionnaire_title");
+      const storedPeriod = sessionStorage.getItem("questionnaire_period");
       if (storedTitle && storedPeriod) {
         setQuestionnaireTitle(storedTitle);
         setQuestionnairePeriod(storedPeriod);
       }
-      setpatname(localStorage.getItem("name"));
-      setpatid(localStorage.getItem("id"));
+      setpatname(sessionStorage.getItem("name"));
+      setpatid(sessionStorage.getItem("uhid"));
     }
   }, [router.isReady]);
 
@@ -821,7 +821,7 @@ const page = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("oks_answers");
+      const saved = sessionStorage.getItem("oks_answers");
       return saved ? JSON.parse(saved) : {};
     }
     return {};
@@ -856,7 +856,7 @@ const page = () => {
     setAnswers(updatedAnswers);
     
     if (typeof window !== "undefined") {
-    localStorage.setItem("oks_answers", JSON.stringify(updatedAnswers));
+      sessionStorage.setItem("oks_answers", JSON.stringify(updatedAnswers));
     }
   };
 
@@ -916,7 +916,7 @@ const page = () => {
       await updateQuestionnaireStatus();
 
       if (typeof window !== "undefined") {
-      localStorage.removeItem("oks_answers");
+        sessionStorage.removeItem("oks_answers");
       }
       router.push("/");
       console.log("Submitted answers:", answers);
@@ -926,7 +926,7 @@ const page = () => {
   const sendQuestionnaireScores = async (score, timestamp) => {
     if (typeof window !== "undefined") {
     try {
-      const uhid = localStorage.getItem("uhid"); // Get user UHID
+      const uhid = sessionStorage.getItem("uhid"); // Get user UHID
       const name = questionnaireTitle; // e.g. "Oxford Knee Score"
       const period = questionnairePeriod; // Pre-op / Post-op or similar
 
@@ -964,7 +964,7 @@ const page = () => {
 
   const updateQuestionnaireStatus = async () => {
     if (typeof window !== "undefined") {
-    const uhid = localStorage.getItem("uhid");
+    const uhid = sessionStorage.getItem("uhid");
     const cmp =1;
     try {
       const payload = {

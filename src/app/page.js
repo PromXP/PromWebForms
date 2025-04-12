@@ -1,6 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+
+import { API_URL } from "./libs/global";
 
 import Image from "next/image";
 
@@ -99,6 +102,8 @@ export default function Home() {
 
   const [transformedData, setTransformedData] = useState([]);
 
+  const [isOpen, setIsOpen] = useState(true);
+
   const mapQuestionnaireData = (assignedList) => {
     return assignedList.map((item) => {
       const name = item.name.toLowerCase();
@@ -137,34 +142,63 @@ export default function Home() {
 
   const handleUserData = (data) => {
     setUserData(data);
-    
   };
-  
 
   useEffect(() => {
     if (userData?.user?.questionnaire_assigned) {
       const mapped = mapQuestionnaireData(userData.user.questionnaire_assigned);
       setTransformedData(mapped);
     }
-    console.log("Patient Data",userData);
+    console.log("Patient Data", userData);
   }, [userData]);
+
+  useEffect(() => {
+    // If userData already exists, don't fetch again
+    if (userData && userData.user) return;
+  
+    const uhid = sessionStorage.getItem("uhid");
+    const password = sessionStorage.getItem("password");
+    
+  
+    if (uhid && password) {
+      setIsOpen(false);
+      const fetchUserData = async () => {
+        try {
+          const res = await axios.post(API_URL + "login", {
+            identifier: uhid,
+            password: password,
+            role: "patient"
+          });
+          handleUserData(res.data); // this will trigger your other effect
+          
+
+        } catch (err) {
+          console.error("Auto login failed:", err);
+          sessionStorage.clear(); // remove bad data
+        }
+      };
+  
+      fetchUserData();
+    }
+  }, [userData]);
+  
 
   const handlequestionnaireclick = (title, period) => {
     console.log("Questionnaire Data", transformedData); // log the mapped value here
     console.log("Selected Questionnaire:", title);
     console.log("Period:", period);
     if (typeof window !== "undefined") {
-      
-    localStorage.setItem("questionnaire_title", title);
-    localStorage.setItem("questionnaire_period", period);
-    localStorage.setItem("uhid",userData.user.uhid);
-    localStorage.setItem("name",userData.user.first_name+" "+userData.user.last_name);
+      sessionStorage.setItem("questionnaire_title", title);
+      sessionStorage.setItem("questionnaire_period", period);
+      sessionStorage.setItem("uhid", userData.user.uhid);
+      sessionStorage.setItem(
+        "name",
+        userData.user.first_name + " " + userData.user.last_name
+      );
     }
 
     router.push("/Questionnaire");
   };
-
-const [isOpen, setIsOpen] = useState(true);
 
 
 

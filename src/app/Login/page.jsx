@@ -54,25 +54,30 @@ const page = ({ isOpen, onClose, userDatasend }) => {
   const [response, setResponse] = useState(null);
 
   const fetchData = async () => {
-
-    if (!userUHID.trim()) return showWarning("UHID / PHONE / EMAIL is required");
+    if (!userUHID.trim())
+      return showWarning("UHID / PHONE / EMAIL is required");
     if (!userPassword.trim()) return showWarning("PASSWORD is required");
 
     const payload = {
       identifier: userUHID,
       password: userPassword,
-      role: 'patient',
+      role: "patient",
     };
 
     try {
       const res = await axios.post(API_URL + "login", payload);
       setResponse(res.data);
-     
+
+      // Store in sessionStorage
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("uhid", userUHID);
+        sessionStorage.setItem("password", userPassword); // ⚠️ store password only if absolutely needed
+      }
+
       onClose();
     } catch (err) {
       console.error("POST error:", err);
     }
-    
   };
 
   useEffect(() => {
@@ -80,7 +85,6 @@ const page = ({ isOpen, onClose, userDatasend }) => {
       userDatasend(response);
     }
   }, [response]);
-  
 
   const showWarning = (message) => {
     setAlertMessage(message);

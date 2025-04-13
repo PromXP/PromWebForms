@@ -155,11 +155,10 @@ export default function Home() {
   useEffect(() => {
     // If userData already exists, don't fetch again
     if (userData && userData.user) return;
-  
+
     const uhid = sessionStorage.getItem("uhid");
     const password = sessionStorage.getItem("password");
-    
-  
+
     if (uhid && password) {
       setIsOpen(false);
       const fetchUserData = async () => {
@@ -167,21 +166,18 @@ export default function Home() {
           const res = await axios.post(API_URL + "login", {
             identifier: uhid,
             password: password,
-            role: "patient"
+            role: "patient",
           });
           handleUserData(res.data); // this will trigger your other effect
-          
-
         } catch (err) {
           console.error("Auto login failed:", err);
           sessionStorage.clear(); // remove bad data
         }
       };
-  
+
       fetchUserData();
     }
   }, [userData]);
-  
 
   const handlequestionnaireclick = (title, period) => {
     console.log("Questionnaire Data", transformedData); // log the mapped value here
@@ -200,14 +196,13 @@ export default function Home() {
     router.push("/Questionnaire");
   };
 
-
-
   return (
     <>
       <div
         className={`${poppins.className} w-screen  bg-white flex flex-col  ${
-          width < 600 ? "h-screen p-2" : "h-screen p-4"
-        } relative`}
+          width < 600 ? (isOpen ? "h-screen" : "h-full") : "h-screen p-4"
+        }
+ relative`}
       >
         <div
           className={`w-full  rounded-2xl bg-[linear-gradient(to_bottom_right,_#7075DB_0%,_#7075DB_40%,_#DFCFF7_100%)] flex ${
@@ -242,7 +237,9 @@ export default function Home() {
                     width < 750 ? "text-center" : ""
                   }`}
                 >
-                  {userData?.user?.first_name + " " + userData?.user?.last_name || "User"}
+                  {userData?.user?.first_name +
+                    " " +
+                    userData?.user?.last_name || "User"}
                 </p>
               </div>
               <p
@@ -351,7 +348,6 @@ export default function Home() {
         <div className="absolute bottom-0 left-4">
           <Image src={Flower} alt="flower" className="w-32 h-32" />
         </div>
-
       </div>
       <Login
         isOpen={isOpen}

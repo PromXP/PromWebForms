@@ -206,7 +206,7 @@ export default function Home() {
     <>
       <div
         className={`${poppins.className} w-screen  bg-white flex flex-col  ${
-          width < 600 ? "h-full p-2" : "h-screen p-4"
+          width < 600 ? "h-screen p-2" : "h-screen p-4"
         } relative`}
       >
         <div
@@ -242,7 +242,7 @@ export default function Home() {
                     width < 750 ? "text-center" : ""
                   }`}
                 >
-                  {userData?.user?.first_name + " " + userData?.user?.last_name}
+                  {userData?.user?.first_name + " " + userData?.user?.last_name || "User"}
                 </p>
               </div>
               <p
@@ -351,6 +351,7 @@ export default function Home() {
         <div className="absolute bottom-0 left-4">
           <Image src={Flower} alt="flower" className="w-32 h-32" />
         </div>
+
       </div>
       <Login
         isOpen={isOpen}

@@ -918,7 +918,7 @@ const page = () => {
       if (typeof window !== "undefined") {
         sessionStorage.removeItem("oks_answers");
       }
-      router.push("/");
+      router.replace("/");
       console.log("Submitted answers:", answers);
     }
   };

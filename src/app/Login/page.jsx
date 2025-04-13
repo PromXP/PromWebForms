@@ -49,6 +49,7 @@ const page = ({ isOpen, onClose, userDatasend }) => {
   const [data, setData] = useState(null);
   const [userUHID, setuserUHID] = useState("");
   const [userPassword, setuserPassword] = useState("");
+  const [showPassword, setshowPassword] = useState(false);
   const [showAlert, setshowAlert] = useState(false);
   const [alermessage, setAlertMessage] = useState("");
   const [response, setResponse] = useState(null);
@@ -76,6 +77,7 @@ const page = ({ isOpen, onClose, userDatasend }) => {
 
       onClose();
     } catch (err) {
+      alert("Login failed. Please check your credentials.");
       console.error("POST error:", err);
     }
   };
@@ -153,16 +155,23 @@ const page = ({ isOpen, onClose, userDatasend }) => {
                 <p className="font-bold text-5 text-black">PASSWORD</p>
               </div>
 
-              <div className="w-full flex flex-col gap-2">
+              <div className="w-full flex flex-col gap-2 relative">
                 <input
+                  type={showPassword ? "text" : "password"}
                   placeholder="PASSWORD"
-                  rows={3}
-                  type="password"
-                  className="w-full text-black px-4 py-2  text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full text-black px-4 py-2 text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 pr-16" // extra right padding for button space
                   style={{ backgroundColor: "rgba(71, 84, 103, 0.1)" }}
                   value={userPassword}
                   onChange={(e) => setuserPassword(e.target.value)}
                 />
+
+                <button
+                  type="button"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm text-[#005585] focus:outline-none cursor-pointer"
+                  onClick={() => setshowPassword((prev) => !prev)}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
               </div>
 
               <div className="w-full flex flex-row justify-center items-center">

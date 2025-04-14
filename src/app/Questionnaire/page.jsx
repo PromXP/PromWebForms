@@ -52,8 +52,8 @@ const page = () => {
   const router = useRouter();
   const [questionnaireTitle, setQuestionnaireTitle] = useState("");
   const [questionnairePeriod, setQuestionnairePeriod] = useState("");
-  const [patname,setpatname] = useState("");
-  const [patid,setpatid] = useState("");
+  const [patname, setpatname] = useState("");
+  const [patid, setpatid] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -762,11 +762,13 @@ const page = () => {
 
     const t = questionnaireTitle.trim().toLowerCase();
 
+    console.log("Questionnaire",t);
+
     if (t === "oxford knee score (oks)") {
       setQuestions(oks);
     } else if (t === "forgotten joint score (fjs)") {
       setQuestions(fjs);
-    } else if (t === "knee injury and ostheoarthritis outcome score (koos)") {
+    } else if (t.toLowerCase().includes("koos, jr")) {
       setQuestions(koos);
     } else if (t === "knee society score (kss)") {
       const p = questionnairePeriod.trim().toLowerCase();
@@ -854,7 +856,7 @@ const page = () => {
     }
 
     setAnswers(updatedAnswers);
-    
+
     if (typeof window !== "undefined") {
       sessionStorage.setItem("oks_answers", JSON.stringify(updatedAnswers));
     }
@@ -925,72 +927,72 @@ const page = () => {
 
   const sendQuestionnaireScores = async (score, timestamp) => {
     if (typeof window !== "undefined") {
-    try {
-      const uhid = sessionStorage.getItem("uhid"); // Get user UHID
-      const name = questionnaireTitle; // e.g. "Oxford Knee Score"
-      const period = questionnairePeriod; // Pre-op / Post-op or similar
+      try {
+        const uhid = sessionStorage.getItem("uhid"); // Get user UHID
+        const name = questionnaireTitle; // e.g. "Oxford Knee Score"
+        const period = questionnairePeriod; // Pre-op / Post-op or similar
 
-      // Construct the payload
-      const scoreArray = score.map((s) => parseFloat(s)); // ensure numbers
-      const payload = {
-        uhid: uhid,
-        questionnaire_scores: [
-          {
-            name: name,
-            score: scoreArray,
-            period: period,
-            timestamp: timestamp,
-          },
-        ],
-      };
-      console.log("Sending to:", `${API_URL}add-questionnaire-scores`);
-      console.log("PUT Payload:", payload);
+        // Construct the payload
+        const scoreArray = score.map((s) => parseFloat(s)); // ensure numbers
+        const payload = {
+          uhid: uhid,
+          questionnaire_scores: [
+            {
+              name: name,
+              score: scoreArray,
+              period: period,
+              timestamp: timestamp,
+            },
+          ],
+        };
+        console.log("Sending to:", `${API_URL}add-questionnaire-scores`);
+        console.log("PUT Payload:", payload);
 
-      const response = await axios.put(API_URL+"add-questionnaire-scores", payload);
+        const response = await axios.put(
+          API_URL + "add-questionnaire-scores",
+          payload
+        );
 
-      console.log("PUT Response:", response.data);
+        console.log("PUT Response:", response.data);
 
-      // Optional: Show success toast or alert
-      // toast.success("Update successful!");
+        // Optional: Show success toast or alert
+        // toast.success("Update successful!");
 
-      // Call status updater
-      
-    } catch (error) {
-      console.error("PUT Error:", error);
-      // toast.error("Update failed!");
+        // Call status updater
+      } catch (error) {
+        console.error("PUT Error:", error);
+        // toast.error("Update failed!");
+      }
     }
-  }
   };
 
   const updateQuestionnaireStatus = async () => {
     if (typeof window !== "undefined") {
-    const uhid = sessionStorage.getItem("uhid");
-    const cmp =1;
-    try {
-      const payload = {
-        uhid: uhid,
-        name: questionnaireTitle,       // same as HomeFragment.selectedquestionnaire
-        period: questionnairePeriod,             // same as HomeFragment.quesperiod
-        completed: cmp,
-      };
-  
-      console.log("Sending to:", `${API_URL}update-questionnaire-status`);
-console.log("Payload:", payload);
+      const uhid = sessionStorage.getItem("uhid");
+      const cmp = 1;
+      try {
+        const payload = {
+          uhid: uhid,
+          name: questionnaireTitle, // same as HomeFragment.selectedquestionnaire
+          period: questionnairePeriod, // same as HomeFragment.quesperiod
+          completed: cmp,
+        };
 
-  
-      const response = await axios.put(
-        API_URL+"update-questionnaire-status",
-        payload
-      );
-  
-      console.log("PUT Response (status):", response.data);
-      alert("✅ Questionnaire Submitted Successfully!");
-  
-    } catch (error) {
-      console.error("PUT Error (status):", error);
-      alert("❌ Failed to update questionnaire status.");
+        console.log("Sending to:", `${API_URL}update-questionnaire-status`);
+        console.log("Payload:", payload);
+
+        const response = await axios.put(
+          API_URL + "update-questionnaire-status",
+          payload
+        );
+
+        console.log("PUT Response (status):", response.data);
+        alert("✅ Questionnaire Submitted Successfully!");
+      } catch (error) {
+        console.error("PUT Error (status):", error);
+        alert("❌ Failed to update questionnaire status.");
+      }
     }
-  }
   };
 
   function calculateTotalScore(answers) {
@@ -1165,7 +1167,6 @@ console.log("Payload:", payload);
                 width < 850 ? "text-center h-fit" : "text-end h-1/2 "
               }`}
             >
-              
               PATIENT NAME: {patname}
             </p>
             <p
@@ -1208,6 +1209,9 @@ console.log("Payload:", payload);
                 width < 700 ? "h-full" : "h-3/5"
               }`}
             >
+              <p className="text-sm text-black text-center font-semibold">
+                Question {currentIndex + 1} / {questions.length}
+              </p>
               {questions[currentIndex] && (
                 <p
                   className={`w-full  text-white text-base font-semibold ${

@@ -13,6 +13,7 @@ import Human from "@/app/assets/student.png";
 import Flower from "@/app/assets/flower.png";
 
 import Login from "@/app/Login/page";
+import Firstimepassreset from "@/app/Firsttimepass/page";
 
 import "@/app/globals.css";
 
@@ -104,6 +105,9 @@ export default function Home() {
 
   const [isOpen, setIsOpen] = useState(true);
 
+  const [passopen, setpassopen] = useState(false);
+
+
   const mapQuestionnaireData = (assignedList) => {
     return assignedList.map((item) => {
       const name = item.name.toLowerCase();
@@ -153,11 +157,16 @@ export default function Home() {
   }, [userData]);
 
   useEffect(() => {
+    const uhid = sessionStorage.getItem("uhid");
+    const password = sessionStorage.getItem("password");
+
+    if (password === "patient@123") {
+      setpassopen(true);
+    }
     // If userData already exists, don't fetch again
     if (userData && userData.user) return;
 
-    const uhid = sessionStorage.getItem("uhid");
-    const password = sessionStorage.getItem("password");
+    
 
     if (uhid && password) {
       setIsOpen(false);
@@ -195,6 +204,9 @@ export default function Home() {
 
     router.push("/Questionnaire");
   };
+
+
+
 
   return (
     <>
@@ -353,6 +365,10 @@ export default function Home() {
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         userDatasend={handleUserData}
+      />
+      <Firstimepassreset
+        passopen={passopen}
+        onClose={() => setpassopen(false)}
       />
     </>
   );

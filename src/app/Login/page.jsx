@@ -69,9 +69,11 @@ const page = ({ isOpen, onClose, userDatasend }) => {
       const res = await axios.post(API_URL + "login", payload);
       setResponse(res.data);
 
+      console.log("Login Data",res.data.user.uhid);
+
       // Store in sessionStorage
       if (typeof window !== "undefined") {
-        sessionStorage.setItem("uhid", userUHID);
+        sessionStorage.setItem("uhid", res.data.user.uhid);
         sessionStorage.setItem("password", userPassword); // ⚠️ store password only if absolutely needed
       }
 

@@ -59,20 +59,21 @@ const page = ({ passopen, onClose }) => {
         new_password: userPassword,
       };
 
+      console.log("Reset data",payload);
+
       try {
         const res = await axios.put(
           "https://promapi.onrender.com/patients/reset-password",
           payload
         );
-sessionStorage.setItem("password",userPassword);
-        
+        sessionStorage.setItem("password", userPassword);
+
         onClose();
       } catch (err) {
         console.error("POST error:", err);
       }
     }
   };
-
 
   const showWarning = (message) => {
     setAlertMessage(message);

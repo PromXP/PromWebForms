@@ -990,7 +990,7 @@ const page = () => {
         alert("✅ Questionnaire Submitted Successfully!");
       } catch (error) {
         console.error("PUT Error (status):", error);
-        alert("❌ Failed to update questionnaire status.");
+        // alert("❌ Failed to update questionnaire status.");
       }
     }
   };
